@@ -254,24 +254,26 @@ export function TypingTest() {
       const isError = errors.has(i);
       const isCurrent = i === currentIndex;
 
-      let fg = "#333333"; // untyped (very dim)
-
-      if (isTyped) {
-        if (isError) {
-          fg = "#ff6b6b"; // error (red)
-        } else {
-          fg = "#e0e0e0"; // typed correctly (very light gray)
-        }
-      }
-
+      // Only show background for cursor position, never for typed characters
       if (isCurrent) {
-        // Show cursor with bright color
+        // Show cursor as square with background (next character to type)
         chars.push(
-          <span key={i} style={{ fg: "#ffffff" }}>
+          <span key={i} style={{ fg: "#000000", bg: "#ffffff" }}>
             {char}
           </span>
         );
       } else {
+        // All other characters (typed or untyped) have no background
+        let fg = "#333333"; // untyped (very dim)
+
+        if (isTyped) {
+          if (isError) {
+            fg = "#ff6b6b"; // error (red)
+          } else {
+            fg = "#e0e0e0"; // typed correctly (very light gray)
+          }
+        }
+
         chars.push(
           <span key={i} style={{ fg }}>
             {char}
@@ -296,11 +298,9 @@ export function TypingTest() {
       alignItems: "center",
       backgroundColor: "#000000"
     }}>
-        <box style={{
+        <box style={{ 
           flexDirection: "column",
           alignItems: "center",
-          border: true,
-          borderStyle: "double",
           padding: 3,
           minWidth: 50
         }}>
@@ -342,11 +342,12 @@ export function TypingTest() {
   const maxTextWidth = Math.min(width - 8, 80);
 
   return (
-    <box style={{
-      flexDirection: "column",
+    <box style={{ 
+      flexDirection: "column", 
       height: "100%",
       justifyContent: "center",
-      alignItems: "center"
+      alignItems: "center",
+      backgroundColor: "#000000"
     }}>
       {/* Main typing area - centered */}
       <box style={{
@@ -369,7 +370,7 @@ export function TypingTest() {
         {/* Stats bar - row layout with minWidth to prevent layout shift */}
         <box style={{ flexDirection: "row", alignItems: "center", marginTop: 1 }}>
           <box style={{ minWidth: 10 }}>
-            <text style={{ fg: "#666666" }}>𝐤𝐞𝐲𝐬𝐦 𝐚𝐬𝐡𝐞𝐫</text>
+            <text style={{ fg: "#666666" }}>keysmasher</text>
           </box>
           <text style={{ fg: "#666666" }}>  •  </text>
           <box style={{ minWidth: 7 }}>

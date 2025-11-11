@@ -1,7 +1,11 @@
 {
   "name": "keysmasher",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "A terminal-based typing speed test inspired by MonkeyType",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/remorses/keysmasher.git"
+  },
   "module": "src/cli.tsx",
   "type": "module",
   "private": false,

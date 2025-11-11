@@ -1,3 +1,5 @@
+
+
 ## opentui
 
 opentui is the framework used to render the tui, using react.
@@ -68,6 +70,8 @@ in bullet points use nested list and specify for which command exactly are the c
 before updating the changelog bump the package.json version field first. NEVER do major bumps. NEVER publish yourself
 
 NEVER update existing changelog bullet points for previous version unless you added those bullet points yourself recently and the change is of the same version as it is now.
+
+only publish when asked.
 
 
 ## zustand

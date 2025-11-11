@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.2
+
+- Clarified cursor rendering logic: only cursor position shows background, typed characters never show background
+
+## 0.1.1
+
+- Fixed cursor to display as a square block with white background
+- Fixed black background to show on main typing screen (not just results)
+- Removed border from results screen
+- Fixed logo to display as plain "keysmasher" text
+
 ## 0.1.0
 
 - Added black background for better contrast and modern look
