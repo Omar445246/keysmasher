@@ -254,13 +254,15 @@ export function TypingTest() {
       const isError = errors.has(i);
       const isCurrent = i === currentIndex;
 
-      // Only show background for cursor position, never for typed characters
+      // Only show underline for cursor position, never for typed characters
       if (isCurrent) {
-        // Show cursor as square with background (next character to type)
+        // Show cursor with underline decoration (next character to type)
         chars.push(
-          <span key={i} style={{ fg: "#000000", bg: "#ffffff" }}>
-            {char}
-          </span>
+          <u key={i}>
+            <span style={{ fg: "#ffffff" }}>
+              {char}
+            </span>
+          </u>
         );
       } else {
         // All other characters (typed or untyped) have transparent background

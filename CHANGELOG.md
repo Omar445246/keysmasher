@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.4
+
+- Changed cursor from background to underline style for cleaner appearance
+- Cursor now shows as white text with underline instead of inverted background
+
 ## 0.1.3
 
 - Explicitly set transparent background for all non-cursor characters to prevent background showing on typed text
