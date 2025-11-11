@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.1.5
+
+### Code Quality
+- Removed unused imports and variables (TextareaRenderable, height, textareaRef)
+- Removed redundant `currentIndex` state - now computed directly from `inputText.length`
+- Simplified Zustand usage: changed from multiple individual selectors to single store access
+- Created `LOGO` constant for easy branding updates across the app
+
+### UI Improvements
+- Increased untyped text visibility from #333333 to #666666 for better readability
+- Redesigned results screen with clean table layout (left/right aligned columns, no vertical spacing)
+- Removed "Test Complete!" heading from results screen
+- Added logo to results screen
+
+### Bug Fixes
+- Fixed Alt/Option/Meta+Backspace word deletion to keep space after previous word
+- Added both `key.option` and `key.meta` support for word deletion on backspace
+- Added comment documenting final WPM calculation behavior
+
 ## 0.1.4
 
 - Changed cursor from background to underline style for cleaner appearance
