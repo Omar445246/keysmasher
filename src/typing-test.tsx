@@ -100,10 +100,11 @@ export function TypingTest() {
       return;
     }
 
+    // Handle backspace (with optional word deletion modifier)
     // TODO: Maybe opentui will implement alt+backspace word deletion natively someday
     if (key.name === "backspace") {
       if (state.inputText.length > 0) {
-        // Alt+Backspace: delete entire word
+        // Alt/Option+Backspace: delete entire word
         if (key.option) {
           let newText = state.inputText;
           const originalLength = newText.length;
@@ -307,7 +308,7 @@ export function TypingTest() {
         {/* Stats bar - row layout with minWidth to prevent layout shift */}
         <box style={{ flexDirection: "row", alignItems: "center" }}>
           <box style={{ minWidth: 10 }}>
-            <text style={{ fg: "#666666" }}>𝐾𝐸𝑌𝑆𝑀𝐴𝑆𝐻</text>
+            <text style={{ fg: "#666666" }}>keysmasher</text>
           </box>
           <text style={{ fg: "#666666" }}>  •  </text>
           <box style={{ minWidth: 7 }}>

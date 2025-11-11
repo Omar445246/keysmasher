@@ -6,12 +6,12 @@
 - Fixed color rendering by using `style={{ fg }}` prop syntax
 - Added padding to stats numbers to prevent layout shift (WPM, accuracy, time)
 - Improved cursor visibility with bright white color (#ffffff) instead of background change
-- Changed logo to mathematical bold characters: 𝐾𝐸𝑌𝑆𝑀𝐴𝑆𝐻
+- Changed logo to lowercase: keysmasher
 - Added more spacing around bullet delimiters for better visual centering
 - Increased typed text brightness to #e0e0e0 and dimmed untyped text to #333333 for maximum contrast
 - Changed stats layout to use row with minWidth instead of padStart for better centering
 - Fixed backspace: now properly removes error markers when deleting characters
-- Added Alt+Backspace support to delete entire words
+- Added Alt+Backspace (Option+Backspace on Mac) support to delete entire words
 - Added .gitignore file
 - Reduced spacing between text and stats line for tighter layout
 - Added "acc" label after accuracy percentage

@@ -1,10 +1,26 @@
 {
   "name": "keysmasher",
+  "version": "0.0.3",
+  "description": "A terminal-based typing speed test inspired by MonkeyType",
   "module": "src/cli.tsx",
   "type": "module",
-  "version": "0.0.3",
   "private": false,
   "bin": "./src/cli.tsx",
+  "files": [
+    "src",
+    "README.md",
+    "CHANGELOG.md",
+    "tsconfig.json"
+  ],
+  "keywords": [
+    "typing",
+    "typing-test",
+    "wpm",
+    "monkeytype",
+    "terminal",
+    "cli",
+    "tui"
+  ],
   "scripts": {
     "cli": "bun --watch src/cli.tsx",
     "prepublishonly": "tsc"
