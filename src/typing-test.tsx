@@ -14,14 +14,20 @@ interface TypingState {
   isFinished: boolean;
   totalCharsTyped: number;
   correctChars: number;
+  lastKeyPressTime: number | null;
+  pausedTime: number;
+  pauseStartTime: number | null;
   resetTest: () => void;
   setInputText: (text: string) => void;
   addError: (index: number) => void;
   startTyping: () => void;
   finishTyping: () => void;
+  recordKeyPress: () => void;
 }
 
-const useTypingStore = create<TypingState>((set) => ({
+const IDLE_THRESHOLD = 2000; // 2 seconds - pause timer if no typing for this long
+
+const useTypingStore = create<TypingState>((set, get) => ({
   words: getRandomWords(50),
   currentIndex: 0,
   inputText: "",
@@ -31,6 +37,9 @@ const useTypingStore = create<TypingState>((set) => ({
   isFinished: false,
   totalCharsTyped: 0,
   correctChars: 0,
+  lastKeyPressTime: null,
+  pausedTime: 0,
+  pauseStartTime: null,
   resetTest: () => set({
     words: getRandomWords(50),
     currentIndex: 0,
@@ -41,13 +50,32 @@ const useTypingStore = create<TypingState>((set) => ({
     isFinished: false,
     totalCharsTyped: 0,
     correctChars: 0,
+    lastKeyPressTime: null,
+    pausedTime: 0,
+    pauseStartTime: null,
   }),
   setInputText: (text: string) => set({ inputText: text }),
   addError: (index: number) => set((state) => ({
     errors: new Set([...state.errors, index])
   })),
-  startTyping: () => set({ startTime: Date.now() }),
+  startTyping: () => set({ startTime: Date.now(), lastKeyPressTime: Date.now() }),
   finishTyping: () => set({ endTime: Date.now(), isFinished: true }),
+  recordKeyPress: () => {
+    const now = Date.now();
+    const state = get();
+    
+    // If we were paused, add the pause duration to total paused time
+    if (state.pauseStartTime !== null) {
+      const pauseDuration = now - state.pauseStartTime;
+      set({ 
+        pausedTime: state.pausedTime + pauseDuration,
+        pauseStartTime: null,
+        lastKeyPressTime: now
+      });
+    } else {
+      set({ lastKeyPressTime: now });
+    }
+  },
 }));
 
 export function TypingTest() {
@@ -64,14 +92,30 @@ export function TypingTest() {
   const isFinished = useTypingStore((s) => s.isFinished);
   const totalCharsTyped = useTypingStore((s) => s.totalCharsTyped);
   const correctChars = useTypingStore((s) => s.correctChars);
+  const lastKeyPressTime = useTypingStore((s) => s.lastKeyPressTime);
+  const pausedTime = useTypingStore((s) => s.pausedTime);
+  const pauseStartTime = useTypingStore((s) => s.pauseStartTime);
 
   const fullText = words.join(" ");
 
-  // Update current time every 100ms for live WPM
+  // Update current time every 100ms for live WPM and handle idle detection
   React.useEffect(() => {
     if (startTime && !endTime) {
       const interval = setInterval(() => {
-        setCurrentTime(Date.now());
+        const now = Date.now();
+        setCurrentTime(now);
+        
+        // Check if user has been idle for too long
+        const state = useTypingStore.getState();
+        if (state.lastKeyPressTime && !state.pauseStartTime) {
+          const idleTime = now - state.lastKeyPressTime;
+          if (idleTime >= IDLE_THRESHOLD) {
+            // Start pause timer
+            useTypingStore.setState({ 
+              pauseStartTime: state.lastKeyPressTime + IDLE_THRESHOLD 
+            });
+          }
+        }
       }, 100);
       return () => clearInterval(interval);
     }
@@ -131,6 +175,7 @@ export function TypingTest() {
             currentIndex: newText.length,
             errors: newErrors
           });
+          state.recordKeyPress();
         } else {
           // Regular backspace: delete one character
           const deletedIndex = state.inputText.length - 1;
@@ -145,6 +190,7 @@ export function TypingTest() {
             currentIndex: newText.length,
             errors: newErrors
           });
+          state.recordKeyPress();
         }
       }
       return;
@@ -171,6 +217,8 @@ export function TypingTest() {
         totalCharsTyped: newTotalChars,
         correctChars: newCorrectChars,
       });
+      
+      state.recordKeyPress();
 
       // Check if finished
       if (newText.length >= fullText.length) {
@@ -180,9 +228,18 @@ export function TypingTest() {
   });
 
   // Calculate stats
-  const elapsedTime = startTime 
-    ? (endTime || currentTime) - startTime 
-    : 0;
+  let elapsedTime = 0;
+  if (startTime) {
+    const rawElapsed = (endTime || currentTime) - startTime;
+    let totalPausedTime = pausedTime;
+    
+    // Add current pause if we're paused right now
+    if (pauseStartTime && !endTime) {
+      totalPausedTime += currentTime - pauseStartTime;
+    }
+    
+    elapsedTime = rawElapsed - totalPausedTime;
+  }
   const elapsedSeconds = elapsedTime / 1000;
   const wpm = calculateWPM(correctChars, elapsedSeconds);
   const accuracy = calculateAccuracy(correctChars, totalCharsTyped);
@@ -297,8 +354,10 @@ export function TypingTest() {
       }}>
         <box style={{ 
           width: maxTextWidth,
-          padding: 2,
-          marginBottom: 1
+          paddingLeft: 2,
+          paddingRight: 2,
+          paddingTop: 2,
+          paddingBottom: 0
         }}>
           <text style={{ flexWrap: "wrap" }}>
             {renderText()}
@@ -306,7 +365,7 @@ export function TypingTest() {
         </box>
 
         {/* Stats bar - row layout with minWidth to prevent layout shift */}
-        <box style={{ flexDirection: "row", alignItems: "center" }}>
+        <box style={{ flexDirection: "row", alignItems: "center", marginTop: 0 }}>
           <box style={{ minWidth: 10 }}>
             <text style={{ fg: "#666666" }}>keysmasher</text>
           </box>

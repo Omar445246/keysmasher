@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.0.6
+
+- Further reduced spacing between text and stats line by removing bottom padding from text box
+
+## 0.0.5
+
+- Reduced spacing between text and stats line for tighter layout
+
+## 0.0.4
+
+- Added idle time detection: timer pauses when no typing for more than 2 seconds
+- Only active typing time is counted towards WPM and total time
+- Timer automatically resumes when typing continues
+
 ## 0.0.3
 
 - Updated @opentui/core and @opentui/react to 0.1.40
