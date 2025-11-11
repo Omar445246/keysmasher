@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3
+
+- Explicitly set transparent background for all non-cursor characters to prevent background showing on typed text
+
 ## 0.1.2
 
 - Clarified cursor rendering logic: only cursor position shows background, typed characters never show background

@@ -263,7 +263,7 @@ export function TypingTest() {
           </span>
         );
       } else {
-        // All other characters (typed or untyped) have no background
+        // All other characters (typed or untyped) have transparent background
         let fg = "#333333"; // untyped (very dim)
 
         if (isTyped) {
@@ -275,7 +275,7 @@ export function TypingTest() {
         }
 
         chars.push(
-          <span key={i} style={{ fg }}>
+          <span key={i} style={{ fg, bg: "transparent" }}>
             {char}
           </span>
         );
