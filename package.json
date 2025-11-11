@@ -1,0 +1,23 @@
+{
+  "name": "keysmasher",
+  "module": "src/cli.tsx",
+  "type": "module",
+  "version": "0.0.3",
+  "private": false,
+  "bin": "./src/cli.tsx",
+  "scripts": {
+    "cli": "bun --watch src/cli.tsx",
+    "prepublishonly": "tsc"
+  },
+  "devDependencies": {
+    "@types/bun": "1.2.23",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@opentui/core": "^0.1.40",
+    "@opentui/react": "^0.1.40",
+    "cac": "^6.7.14",
+    "react": "^19.2.0",
+    "zustand": "^5.0.8"
+  }
+}

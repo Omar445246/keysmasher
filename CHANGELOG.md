@@ -1,0 +1,37 @@
+# Changelog
+
+## 0.0.3
+
+- Updated @opentui/core and @opentui/react to 0.1.40
+- Fixed color rendering by using `style={{ fg }}` prop syntax
+- Added padding to stats numbers to prevent layout shift (WPM, accuracy, time)
+- Improved cursor visibility with bright white color (#ffffff) instead of background change
+- Changed logo to mathematical bold characters: 𝐾𝐸𝑌𝑆𝑀𝐴𝑆𝐻
+- Added more spacing around bullet delimiters for better visual centering
+- Increased typed text brightness to #e0e0e0 and dimmed untyped text to #333333 for maximum contrast
+- Changed stats layout to use row with minWidth instead of padStart for better centering
+- Fixed backspace: now properly removes error markers when deleting characters
+- Added Alt+Backspace support to delete entire words
+- Added .gitignore file
+- Reduced spacing between text and stats line for tighter layout
+- Added "acc" label after accuracy percentage
+
+## 0.0.2
+
+- Improved color contrast: typed text now uses brighter gray (#a0a0a0) vs darker gray (#4a4a4a) for untyped
+- Centered all content vertically and horizontally
+- Removed border from typing area for cleaner look
+- Consolidated stats into single line with bullet delimiters
+- Added branding with special Unicode characters
+- Stats now use low opacity (#666666) for subtle appearance
+- Added Ctrl+C support to exit application
+
+## 0.0.1
+
+- Initial release
+- Typing speed test with 50 random words
+- Real-time WPM calculation
+- Live accuracy tracking
+- Error highlighting in red
+- Results screen with detailed stats
+- Quick restart with Enter key
