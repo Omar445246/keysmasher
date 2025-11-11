@@ -1,12 +1,10 @@
 import * as React from "react";
 import { useKeyboard, useTerminalDimensions } from "@opentui/react";
-import type { TextareaRenderable } from "@opentui/core";
 import { create } from "zustand";
 import { getRandomWords, calculateWPM, calculateAccuracy } from "./utils.ts";
 
 interface TypingState {
   words: string[];
-  currentIndex: number;
   inputText: string;
   errors: Set<number>;
   startTime: number | null;
@@ -26,10 +24,10 @@ interface TypingState {
 }
 
 const IDLE_THRESHOLD = 2000; // 2 seconds - pause timer if no typing for this long
+const LOGO = "𝐤𝐞𝐲𝐬𝐦 𝐚𝐬𝐡𝐞𝐫";
 
 const useTypingStore = create<TypingState>((set, get) => ({
   words: getRandomWords(25),
-  currentIndex: 0,
   inputText: "",
   errors: new Set(),
   startTime: null,
@@ -42,7 +40,6 @@ const useTypingStore = create<TypingState>((set, get) => ({
   pauseStartTime: null,
   resetTest: () => set({
     words: getRandomWords(40),
-    currentIndex: 0,
     inputText: "",
     errors: new Set(),
     startTime: null,
@@ -79,24 +76,14 @@ const useTypingStore = create<TypingState>((set, get) => ({
 }));
 
 export function TypingTest() {
-  const { width, height } = useTerminalDimensions();
+  const { width } = useTerminalDimensions();
   const [currentTime, setCurrentTime] = React.useState(Date.now());
-  const textareaRef = React.useRef<TextareaRenderable>(null);
 
-  const words = useTypingStore((s) => s.words);
-  const currentIndex = useTypingStore((s) => s.currentIndex);
-  const inputText = useTypingStore((s) => s.inputText);
-  const errors = useTypingStore((s) => s.errors);
-  const startTime = useTypingStore((s) => s.startTime);
-  const endTime = useTypingStore((s) => s.endTime);
-  const isFinished = useTypingStore((s) => s.isFinished);
-  const totalCharsTyped = useTypingStore((s) => s.totalCharsTyped);
-  const correctChars = useTypingStore((s) => s.correctChars);
-  const lastKeyPressTime = useTypingStore((s) => s.lastKeyPressTime);
-  const pausedTime = useTypingStore((s) => s.pausedTime);
-  const pauseStartTime = useTypingStore((s) => s.pauseStartTime);
+  const state = useTypingStore();
+  const { words, inputText, errors, startTime, endTime, isFinished, totalCharsTyped, correctChars, pausedTime, pauseStartTime } = state;
 
   const fullText = words.join(" ");
+  const currentIndex = inputText.length;
 
   // Update current time every 100ms for live WPM and handle idle detection
   React.useEffect(() => {
@@ -148,19 +135,21 @@ export function TypingTest() {
     // TODO: Maybe opentui will implement alt+backspace word deletion natively someday
     if (key.name === "backspace") {
       if (state.inputText.length > 0) {
-        // Alt/Option+Backspace: delete entire word
-        if (key.option) {
+        // Alt/Option/Meta+Backspace: delete entire word
+        if (key.option || key.meta) {
           let newText = state.inputText;
           const originalLength = newText.length;
 
           // Trim trailing spaces first
           newText = newText.trimEnd();
 
-          // Find the last space or beginning of string
+          // Find the last space (delete one word back from cursor)
           const lastSpaceIndex = newText.lastIndexOf(" ");
           if (lastSpaceIndex >= 0) {
+            // Keep everything up to and including the space
             newText = newText.slice(0, lastSpaceIndex + 1);
           } else {
+            // No space found, delete everything
             newText = "";
           }
 
@@ -172,7 +161,6 @@ export function TypingTest() {
 
           useTypingStore.setState({
             inputText: newText,
-            currentIndex: newText.length,
             errors: newErrors
           });
           state.recordKeyPress();
@@ -187,7 +175,6 @@ export function TypingTest() {
 
           useTypingStore.setState({
             inputText: newText,
-            currentIndex: newText.length,
             errors: newErrors
           });
           state.recordKeyPress();
@@ -198,8 +185,8 @@ export function TypingTest() {
 
     // Handle character input
     if (key.sequence && key.sequence.length === 1 && !key.ctrl && !key.meta) {
-      const newIndex = state.currentIndex;
-      const expectedChar = fullText[newIndex];
+      const currentIdx = state.inputText.length;
+      const expectedChar = fullText[currentIdx];
       const newText = state.inputText + key.sequence;
 
       let newCorrectChars = state.correctChars;
@@ -208,12 +195,11 @@ export function TypingTest() {
       if (key.sequence === expectedChar) {
         newCorrectChars++;
       } else {
-        state.addError(newIndex);
+        state.addError(currentIdx);
       }
 
       useTypingStore.setState({
         inputText: newText,
-        currentIndex: newIndex + 1,
         totalCharsTyped: newTotalChars,
         correctChars: newCorrectChars,
       });
@@ -266,7 +252,7 @@ export function TypingTest() {
         );
       } else {
         // All other characters (typed or untyped) have transparent background
-        let fg = "#333333"; // untyped (very dim)
+        let fg = "#666666"; // untyped (dim gray)
 
         if (isTyped) {
           if (isError) {
@@ -289,52 +275,52 @@ export function TypingTest() {
 
   // Results screen
   if (isFinished) {
+    // Note: Final WPM uses raw elapsed time without subtracting paused time.
+    // This is intentional - we only exclude idle time from the live timer display,
+    // but final results should reflect actual wall-clock time from start to finish.
     const finalWPM = calculateWPM(correctChars, (endTime! - startTime!) / 1000);
     const finalAccuracy = calculateAccuracy(correctChars, totalCharsTyped);
 
     return (
-    <box style={{ 
-      flexDirection: "column", 
+    <box style={{
+      flexDirection: "column",
       height: "100%",
       justifyContent: "center",
       alignItems: "center",
       backgroundColor: "#000000"
     }}>
-        <box style={{ 
+        <box style={{
           flexDirection: "column",
           alignItems: "center",
-          padding: 3,
-          minWidth: 50
+          padding: 3
         }}>
-          <text style={{ fg: "#51cf66", marginBottom: 2 }}>
-            <strong>Test Complete!</strong>
-          </text>
+          <box style={{ flexDirection: "column", width: 30, marginBottom: 2 }}>
+            <box style={{ flexDirection: "row", justifyContent: "space-between" }}>
+              <text style={{ fg: "#ffd43b" }}>WPM</text>
+              <text style={{ fg: "#ffffff" }}><strong>{finalWPM}</strong></text>
+            </box>
 
-          <box style={{ flexDirection: "column", gap: 1, marginBottom: 2 }}>
-            <text>
-              <span style={{ fg: "#ffd43b" }}>WPM: </span>
-              <strong style={{ fg: "#ffffff" }}>{finalWPM}</strong>
-            </text>
+            <box style={{ flexDirection: "row", justifyContent: "space-between" }}>
+              <text style={{ fg: "#ffd43b" }}>Accuracy</text>
+              <text style={{ fg: "#ffffff" }}><strong>{finalAccuracy}%</strong></text>
+            </box>
 
-            <text>
-              <span style={{ fg: "#ffd43b" }}>Accuracy: </span>
-              <strong style={{ fg: "#ffffff" }}>{finalAccuracy}%</strong>
-            </text>
+            <box style={{ flexDirection: "row", justifyContent: "space-between" }}>
+              <text style={{ fg: "#ffd43b" }}>Time</text>
+              <text style={{ fg: "#ffffff" }}><strong>{elapsedSeconds.toFixed(1)}s</strong></text>
+            </box>
 
-            <text>
-              <span style={{ fg: "#ffd43b" }}>Time: </span>
-              <strong style={{ fg: "#ffffff" }}>{elapsedSeconds.toFixed(1)}s</strong>
-            </text>
-
-            <text>
-              <span style={{ fg: "#ffd43b" }}>Characters: </span>
-              <strong style={{ fg: "#ffffff" }}>{correctChars}/{totalCharsTyped}</strong>
-            </text>
+            <box style={{ flexDirection: "row", justifyContent: "space-between" }}>
+              <text style={{ fg: "#ffd43b" }}>Characters</text>
+              <text style={{ fg: "#ffffff" }}><strong>{correctChars}/{totalCharsTyped}</strong></text>
+            </box>
           </box>
 
-          <text style={{ fg: "#868e96", marginTop: 1 }}>
+          <text style={{ fg: "#868e96", marginBottom: 1 }}>
             Press <strong>Enter</strong> to try again
           </text>
+
+          <text style={{ fg: "#666666" }}>{LOGO}</text>
         </box>
       </box>
     );
@@ -344,8 +330,8 @@ export function TypingTest() {
   const maxTextWidth = Math.min(width - 8, 80);
 
   return (
-    <box style={{ 
-      flexDirection: "column", 
+    <box style={{
+      flexDirection: "column",
       height: "100%",
       justifyContent: "center",
       alignItems: "center",
@@ -372,7 +358,7 @@ export function TypingTest() {
         {/* Stats bar - row layout with minWidth to prevent layout shift */}
         <box style={{ flexDirection: "row", alignItems: "center", marginTop: 1 }}>
           <box style={{ minWidth: 10 }}>
-            <text style={{ fg: "#666666" }}>keysmasher</text>
+            <text style={{ fg: "#666666" }}>{LOGO}</text>
           </box>
           <text style={{ fg: "#666666" }}>  •  </text>
           <box style={{ minWidth: 7 }}>
