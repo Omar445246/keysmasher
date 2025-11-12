@@ -100,6 +100,7 @@ The text will be automatically split into groups of 25 words. Press Enter after 
 - Press `Alt+Backspace` (Option+Backspace on Mac) to delete an entire word
 - Press `ESC` or `Ctrl+C` to quit
 - Press `Enter` after completion to start a new test
+- Press `Ctrl+R` to restart test
 
 ## Development
 
