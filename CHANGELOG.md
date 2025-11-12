@@ -1,5 +1,39 @@
 # Changelog
 
+## 0.2.0
+
+### Features
+- Untyped text now has reduced saturation (60%) in addition to reduced opacity for better visual distinction
+- Uses culori library for advanced color manipulation (saturation + lightness adjustment)
+- Refactored code snippets to use template literal tags for better syntax highlighting in editor
+- Code snippets now stored as single strings with newlines (normalized to single spaces at runtime)
+
+### Breaking Changes
+- Removed automatic language detection - you must now explicitly pass `--lang` flag to highlight custom text
+- Removed `--no-highlight` flag (no longer needed without auto-detection)
+
+### Dependencies
+- Added `culori` (^4.0.2) for color space manipulation
+
+## 0.1.9
+
+### Features
+- Added syntax highlighting for code practice using GitHub Dark theme
+- Added `--lang <language>` flag to practice with random code snippets (e.g., `keysmasher --lang js`)
+- Added automatic language detection for custom text with syntax highlighting
+- Added `--no-highlight` flag to disable syntax highlighting
+- Untyped text now rendered with 60% opacity for better visual distinction
+- Typed text rendered at full color intensity from syntax highlighting
+
+### Language Support
+- Supported languages: JavaScript (js), TypeScript (ts), Python (py), Markdown (md), JSON, HTML, CSS, Bash (sh), YAML (yml), Rust (rs), Go, Java, C, C++
+- 10-15 code snippets per language for varied practice
+- Persistent grammar state across pages for correct highlighting of multi-line constructs
+
+### Dependencies
+- Added `shiki` (^3.15.0) for syntax highlighting
+- Added `@shikijs/langs` (^3.15.0) for language grammar support
+
 ## 0.1.8
 
 ### Features

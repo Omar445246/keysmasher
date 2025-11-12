@@ -1,7 +1,9 @@
 import * as React from "react";
 import { useKeyboard, useTerminalDimensions } from "@opentui/react";
 import { create } from "zustand";
-import { getRandomWords, calculateWPM, calculateAccuracy, WORDS_PER_TEST } from "./utils.ts";
+import { getRandomWords, calculateWPM, calculateAccuracy, WORDS_PER_TEST, adjustColorOpacity } from "./utils.ts";
+import { highlightText, type HighlightResult } from "./highlight.ts";
+import type { ThemedToken, GrammarState } from "shiki";
 
 interface TypingState {
   contentPages: string[][]; // Array of word groups
@@ -17,13 +19,18 @@ interface TypingState {
   lastKeyPressTime: number | null;
   pausedTime: number;
   pauseStartTime: number | null;
-  initializeContent: (pages: string[][]) => void;
+  language: string | null;
+  highlightedPages: Map<number, ThemedToken[][]>;
+  grammarStates: Map<number, GrammarState>;
+  isHighlighted: boolean;
+  initializeContent: (pages: string[][], language?: string | null) => void;
   resetTest: () => void;
   setInputText: (text: string) => void;
   addError: (index: number) => void;
   startTyping: () => void;
   finishTyping: () => void;
   recordKeyPress: () => void;
+  highlightAllPages: () => Promise<void>;
 }
 
 const IDLE_THRESHOLD = 2000; // 2 seconds - pause timer if no typing for this long
@@ -43,7 +50,11 @@ export const useTypingStore = create<TypingState>((set, get) => ({
   lastKeyPressTime: null,
   pausedTime: 0,
   pauseStartTime: null,
-  initializeContent: (pages: string[][]) => {
+  language: null,
+  highlightedPages: new Map(),
+  grammarStates: new Map(),
+  isHighlighted: false,
+  initializeContent: (pages: string[][], language: string | null = null) => {
     set({
       contentPages: pages,
       currentPageIndex: 0,
@@ -58,7 +69,16 @@ export const useTypingStore = create<TypingState>((set, get) => ({
       lastKeyPressTime: null,
       pausedTime: 0,
       pauseStartTime: null,
+      language,
+      highlightedPages: new Map(),
+      grammarStates: new Map(),
+      isHighlighted: false,
     });
+
+    // Trigger highlighting if language is provided
+    if (language) {
+      get().highlightAllPages();
+    }
   },
   resetTest: () => {
     const state = get();
@@ -98,6 +118,38 @@ export const useTypingStore = create<TypingState>((set, get) => ({
       });
     } else {
       set({ lastKeyPressTime: now });
+    }
+  },
+  highlightAllPages: async () => {
+    const state = get();
+    if (!state.language) return;
+
+    const highlightedPages = new Map<number, ThemedToken[][]>();
+    const grammarStates = new Map<number, GrammarState>();
+
+    let currentGrammarState: GrammarState | undefined = undefined;
+
+    try {
+      for (let i = 0; i < state.contentPages.length; i++) {
+        const pageWords = state.contentPages[i]!;
+        const pageText = pageWords.join(" ");
+
+        const result = await highlightText(pageText, state.language, currentGrammarState);
+        highlightedPages.set(i, result.tokens);
+        if (result.grammarState) {
+          grammarStates.set(i, result.grammarState);
+          currentGrammarState = result.grammarState;
+        }
+      }
+
+      set({
+        highlightedPages,
+        grammarStates,
+        isHighlighted: true,
+      });
+    } catch (error) {
+      console.error("Failed to highlight pages:", error);
+      set({ isHighlighted: false });
     }
   },
 }));
@@ -260,6 +312,25 @@ export function TypingTest() {
   // Render the text with colors
   const renderText = () => {
     const chars: React.ReactNode[] = [];
+    const storeState = useTypingStore.getState();
+
+    // Get highlighted tokens for current page if available
+    const highlightedTokens = storeState.isHighlighted
+      ? storeState.highlightedPages.get(storeState.currentPageIndex)
+      : null;
+
+    // Flatten tokens to character array with colors
+    let charColors: string[] = [];
+    if (highlightedTokens) {
+      for (const line of highlightedTokens) {
+        for (const token of line) {
+          const tokenColor = token.color || "#e1e4e8";
+          for (let i = 0; i < token.content.length; i++) {
+            charColors.push(tokenColor);
+          }
+        }
+      }
+    }
 
     for (let i = 0; i < fullText.length; i++) {
       const char = fullText[i];
@@ -267,32 +338,46 @@ export function TypingTest() {
       const isError = errors.has(i);
       const isCurrent = i === currentIndex;
 
-      // Only show block background for cursor position, never for typed characters
+      // Cursor position - yellow highlight
       if (isCurrent) {
-        // Show cursor with block background (next character to type)
         chars.push(
           <span key={i} style={{ fg: "#000000", bg: "#ffd43b" }}>
             {char}
           </span>
         );
-      } else {
-        // All other characters (typed or untyped) have transparent background
-        let fg = "#666666"; // untyped (dim gray)
+        continue;
+      }
 
+      let fg: string;
+
+      // Error - always red
+      if (isError) {
+        fg = "#ff6b6b";
+      } else if (highlightedTokens && charColors[i]) {
+        // Use syntax highlighting color
+        const baseColor = charColors[i]!;
         if (isTyped) {
-          if (isError) {
-            fg = "#ff6b6b"; // error (red)
-          } else {
-            fg = "#e0e0e0"; // typed correctly (very light gray)
-          }
+          // Typed text - full color
+          fg = '#fff'
+        } else {
+          // Untyped text - dimmed with 0.6 opacity
+          fg = adjustColorOpacity(baseColor, 0.9);
         }
 
-        chars.push(
-          <span key={i} style={{ fg, bg: "transparent" }}>
-            {char}
-          </span>
-        );
+      } else {
+        // Fallback to default colors (no highlighting)
+        if (isTyped) {
+          fg = "#fff"; // typed correctly (light gray)
+        } else {
+          fg = "#777777"; // untyped (dim gray)
+        }
       }
+
+      chars.push(
+        <span key={i} style={{ fg, bg: "transparent" }}>
+          {char}
+        </span>
+      );
     }
 
     // Add cursor at the end if we've typed all characters

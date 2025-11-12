@@ -1,6 +1,6 @@
 {
   "name": "keysmasher",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "A terminal-based typing speed test inspired by MonkeyType",
   "repository": {
     "type": "git",
@@ -36,8 +36,11 @@
   "dependencies": {
     "@opentui/core": "^0.1.40",
     "@opentui/react": "^0.1.40",
+    "@shikijs/langs": "^3.15.0",
     "cac": "^6.7.14",
+    "culori": "^4.0.2",
     "react": "^19.2.0",
+    "shiki": "^3.15.0",
     "zustand": "^5.0.8"
   }
 }
