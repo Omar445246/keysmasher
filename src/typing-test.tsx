@@ -358,18 +358,17 @@ export function TypingTest() {
         const baseColor = charColors[i]!;
         if (isTyped) {
           // Typed text - full color
-          fg = '#fff'
+          fg = '#85e89d'
         } else {
-          // Untyped text - dimmed with 0.6 opacity
-          fg = adjustColorOpacity(baseColor, 0.9);
+          fg = baseColor
         }
 
       } else {
         // Fallback to default colors (no highlighting)
         if (isTyped) {
-          fg = "#fff"; // typed correctly (light gray)
+          fg = "#85e89d"; // typed correctly (light gray)
         } else {
-          fg = "#777777"; // untyped (dim gray)
+          fg = "#aaa"; // untyped (dim gray)
         }
       }
 
