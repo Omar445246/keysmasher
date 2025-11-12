@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.1.8
+
+### Features
+- Added support for custom text via positional argument: `keysmasher "your text"`
+- Added pagination support for long texts - automatically splits into groups of 25 words
+- Page indicator shows progress when using custom text (e.g., "2/5")
+
+### Text Processing
+- Added automatic emoji removal from custom text
+- Added comprehensive whitespace normalization (newlines, tabs, multiple spaces → single space)
+- All custom text is cleaned and normalized for optimal typing practice
+
+### Code Quality
+- Refactored to use zustand store mutation instead of props for content initialization
+- Exported `useTypingStore` for direct state access
+- Simplified `TypingTest` component by removing props
+- Fixed word count inconsistency (was using 25 on init, 40 on reset)
+- Created `WORDS_PER_TEST` constant (25 words) and exported from utils
+
+### Documentation
+- Updated README with custom text usage examples
+- Added command substitution examples for reading files: `keysmasher "$(cat file.txt)"`
+- Updated "How It Works" section to explain pagination
+
 ## 0.1.7
 
 ### UI Improvements
