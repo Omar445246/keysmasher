@@ -40,6 +40,7 @@ keysmasher
 - Press `Alt+Backspace` (Option+Backspace on Mac) to delete an entire word
 - Press `ESC` or `Ctrl+C` to quit
 - Press `Enter` after completion to start a new test
+- Press `Ctrl+R` to restart test
 
 ## Development
 

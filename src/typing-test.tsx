@@ -127,6 +127,11 @@ export function TypingTest() {
       process.exit(0);
     }
 
+    if (key.ctrl && key.name === "r") {
+      state.resetTest();
+      return;
+    }
+
     if (key.name === "return") {
       return;
     }
