@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.2
+
+### Features
+- Added Ctrl+R shortcut to quickly restart the test
+
 ## 0.2.1
 
 ### UI Improvements
