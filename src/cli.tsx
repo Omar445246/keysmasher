@@ -4,8 +4,9 @@ import { createRoot, useRenderer } from "@opentui/react";
 import { createCliRenderer } from "@opentui/core";
 import * as React from "react";
 import { TypingTest, useTypingStore } from "./typing-test.tsx";
-import { splitIntoWordGroups, WORDS_PER_TEST } from "./utils.ts";
+import { splitIntoWordGroups, WORDS_PER_TEST, getRandomWords } from "./utils.ts";
 import { getRandomCodeSnippet, normalizeLanguage } from "./code-snippets.ts";
+import pkg from "../package.json" with { type: "json" };
 
 const cli = cac("keysmasher");
 
@@ -53,7 +54,11 @@ cli
         }
       } else {
         // Default: random words (no highlighting)
-        contentPages = [useTypingStore.getState().words];
+        // Generate 20 pages of random words
+        contentPages = [];
+        for (let i = 0; i < 20; i++) {
+          contentPages.push(getRandomWords(WORDS_PER_TEST));
+        }
         language = null;
       }
 
@@ -71,5 +76,5 @@ cli
   });
 
 cli.help();
-cli.version("0.0.1");
+cli.version(pkg.version);
 cli.parse();

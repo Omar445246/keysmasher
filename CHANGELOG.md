@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.3
+
+### Features
+- Default test now generates 20 pages of random words instead of just one
+- Expanded word pool with ~300 new words for more varied practice
+- Each test run generates fresh random text
+
 ## 0.2.2
 
 ### Features
